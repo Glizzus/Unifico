@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unifico.Core", "Unifico.Core\Unifico.Core.csproj", "{960A9C97-C7BA-4DFE-82D8-13FC76F1F2B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unifico.Core.Tests", "Unifico.Core.Tests\Unifico.Core.Tests.csproj", "{20BD10CA-8E0C-4D5C-A6CF-EA8612277C7C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unifico.CLI", "Unifico.CLI\Unifico.CLI.csproj", "{0378E57F-6ED7-400F-8784-312913DFB965}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{960A9C97-C7BA-4DFE-82D8-13FC76F1F2B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960A9C97-C7BA-4DFE-82D8-13FC76F1F2B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960A9C97-C7BA-4DFE-82D8-13FC76F1F2B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960A9C97-C7BA-4DFE-82D8-13FC76F1F2B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20BD10CA-8E0C-4D5C-A6CF-EA8612277C7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20BD10CA-8E0C-4D5C-A6CF-EA8612277C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20BD10CA-8E0C-4D5C-A6CF-EA8612277C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20BD10CA-8E0C-4D5C-A6CF-EA8612277C7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0378E57F-6ED7-400F-8784-312913DFB965}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0378E57F-6ED7-400F-8784-312913DFB965}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0378E57F-6ED7-400F-8784-312913DFB965}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0378E57F-6ED7-400F-8784-312913DFB965}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
