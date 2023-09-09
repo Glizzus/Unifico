@@ -290,6 +290,10 @@ public class Game
                 continue;
             }
 
+            if (!_stackJudge.CanStack(card, topCard, IsStack))
+                throw new InvalidDataException(
+                    "A card was played that was not allowed to be played. Refusing to continue.");
+
             if (card.IsWild)
                 card.AssignColor(topCard.Color ?? throw new InvalidDataException("The top card does not have a color"));
             summary.Played = new CardInfo

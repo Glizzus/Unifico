@@ -1,4 +1,4 @@
-using Unifico.Core.Strategy;
+namespace Unifico.Core.Strategy;
 
 public static class StrategyFactory
 {

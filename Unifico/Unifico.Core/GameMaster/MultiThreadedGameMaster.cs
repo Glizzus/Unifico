@@ -2,16 +2,29 @@
 
 namespace Unifico.Core.GameMaster;
 
+/// <summary>
+///     A game master that runs games in parallel.
+/// </summary>
 public class MultiThreadedGameMaster : BaseGameMaster
 {
-    public MultiThreadedGameMaster(IEnumerable<Player> players, int numberOfThreads, int numberOfGames, Rules rules) :
+    /// <summary>
+    ///     Constructs a new multi-threaded game master.
+    /// </summary>
+    /// <param name="players">The players of the games.</param>
+    /// <param name="numberOfGames">The amount of games to play.</param>
+    /// <param name="rules">The rules of the games.</param>
+    /// <param name="numberOfThreads">The maximum amount of threads to use.</param>
+    public MultiThreadedGameMaster(IEnumerable<Player> players, int numberOfGames, Rules rules, int numberOfThreads) :
         base(players,
             numberOfGames, rules)
     {
         NumberOfThreads = numberOfThreads;
     }
 
-    public int NumberOfThreads { get; init; }
+    /// <summary>
+    ///     The maximum amount of threads to use.
+    /// </summary>
+    public int NumberOfThreads { get; }
 
     public override async Task Run()
     {

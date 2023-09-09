@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Concurrent;
+using System.Reflection;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -7,8 +8,6 @@ namespace Unifico.Core.Plugins;
 
 public static class PluginFactory
 {
-    private static readonly Dictionary<string, IStrategyPlugin> _pluginCache = new();
-
     private static IStrategyPlugin? ExtractPlugin(Assembly assembly)
     {
         foreach (var type in assembly.GetTypes())
@@ -65,8 +64,6 @@ public static class PluginFactory
 
     public static async Task<IStrategyPlugin?> Create(string relativePath)
     {
-        if (_pluginCache.TryGetValue(relativePath, out var plugin))
-            return plugin;
         var assembly = await CompileToDll(relativePath);
         return ExtractPlugin(assembly);
     }

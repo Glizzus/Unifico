@@ -1,6 +1,8 @@
 ﻿using Unifico.Core;
+using Unifico.Core.GameMaster;
 using Unifico.Core.Hand;
 using Unifico.Core.Plugins;
+using Unifico.Core.Strategy;
 using YamlDotNet.Serialization;
 
 namespace Unifico.CLI;
@@ -41,5 +43,15 @@ public class Config
         var text = await File.ReadAllTextAsync(path) ?? throw new Exception("Could not read config file");
         var config = deserializer.Deserialize<Config>(text);
         return config;
+    }
+
+    public async Task<BaseGameMaster> ToGameMaster()
+    {
+        return new GameMasterBuilder()
+            .WithPlayers(await Task.WhenAll(Players.Select(player => player.ToPlayer())))
+            .WithRules(Rules)
+            .WithNumberOfGames(NumberOfGames)
+            .WithNumberOfThreads(NumberOfThreads)
+            .Build();
     }
 }
