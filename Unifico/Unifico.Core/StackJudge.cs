@@ -1,4 +1,6 @@
-﻿namespace Unifico.Core;
+﻿using Unifico.Core.Cards;
+
+namespace Unifico.Core;
 
 /// <summary>
 ///     A judge that determines whether a card can be stacked on another card.

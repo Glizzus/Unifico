@@ -20,13 +20,14 @@ public class ReversibleRingTests
         var strings = new[] { "a", "b", "c" };
         var ring = new ReversibleRing<string>(strings);
 
+
         Assert.AreEqual("a", ring.Current);
         ring.Skip();
-        Assert.AreEqual("b", ring.Current);
-        ring.Skip();
-        Assert.AreEqual("c", ring.Current);
+        Assert.AreEqual("c", ring.Next());
         ring.Skip();
         Assert.AreEqual("b", ring.Next());
+        ring.Skip();
+        Assert.AreEqual("a", ring.Next());
     }
 
     [Test]

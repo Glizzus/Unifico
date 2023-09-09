@@ -1,8 +1,12 @@
 namespace Unifico.Core;
 
+// Disable warning for unused record
+#pragma warning disable 8618
+
 public class CardInfo
 {
     public string Color { get; set; }
+
     public string Face { get; set; }
     public bool Wild { get; set; }
 }

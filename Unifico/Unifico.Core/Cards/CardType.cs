@@ -1,4 +1,4 @@
-﻿namespace Unifico.Core;
+﻿namespace Unifico.Core.Cards;
 
 /// <summary>
 ///     The type of a card.

@@ -1,4 +1,6 @@
-﻿namespace Unifico.Core.GameMaster;
+﻿using System.Collections.Concurrent;
+
+namespace Unifico.Core.GameMaster;
 
 public class MultiThreadedGameMaster : BaseGameMaster
 {
@@ -13,6 +15,9 @@ public class MultiThreadedGameMaster : BaseGameMaster
 
     public override async Task Run()
     {
+        var winMap =
+            new ConcurrentDictionary<string, int>(
+                Players.Select(player => new KeyValuePair<string, int>(player.Name, 0)));
         var semaphore = new SemaphoreSlim(NumberOfThreads);
         var tasks = new List<Task>();
         for (var i = 0; i < NumberOfGames; i++)
@@ -29,17 +34,18 @@ public class MultiThreadedGameMaster : BaseGameMaster
                         Name = $"Game {gameNumber}",
                         Output = new StreamWriter($"../Game {gameNumber}.txt")
                     };
-                    await game.Play();
+                    var (winner, entropies) = await game.Play();
+                    winMap.AddOrUpdate(winner.Name, 1, (_, count) => count + 1);
                 }
                 finally
                 {
                     semaphore.Release();
                 }
             });
-
             tasks.Add(task);
         }
 
         await Task.WhenAll(tasks);
+        foreach (var pair in winMap) Console.WriteLine($"{pair.Key} won {pair.Value} times");
     }
 }

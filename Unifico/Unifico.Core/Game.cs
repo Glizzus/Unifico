@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Unifico.Core.Cards;
 
 namespace Unifico.Core;
 
@@ -238,9 +239,32 @@ public class Game
         };
     }
 
-    public async Task Play()
+    public double Entropy(Player player)
+    {
+        var count = player.Hand.Count();
+        return player.Hand
+            .GroupBy(c => c)
+            .ToDictionary(group => group.Key, group => group.Count())
+            .Select(frequency => frequency.Value / (double)count)
+            .Aggregate<double, double>(0, (current, probability) => current - probability * Math.Log2(probability));
+    }
+
+    public Dictionary<Player, double> StartingEntropies()
+    {
+        var entropies = new Dictionary<Player, double>();
+        for (var i = 0; i < _players.Count; i++)
+        {
+            var player = _players.Next();
+            entropies.Add(player, Entropy(player));
+        }
+
+        return entropies;
+    }
+
+    public async Task<(Player, Dictionary<Player, double>)> Play()
     {
         await InitializeGame();
+        var entropies = StartingEntropies();
         while (true)
         {
             var currentPlayer = _players.Next();
@@ -292,7 +316,7 @@ public class Game
 
             await Output.WriteAsync("]");
             await Output.DisposeAsync();
-            return;
+            return (currentPlayer, entropies);
         }
     }
 }

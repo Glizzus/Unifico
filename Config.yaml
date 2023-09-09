@@ -1,0 +1,14 @@
+NumberOfGames: 1000
+NumberOfThreads: 4
+Rules:
+  PlusStackConvention: Conservative
+  DrawUntilPlayable: false
+Players:
+  - Name: Cal Crosby
+    StrategyPath: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs
+  
+  - Name: Payden Whiting
+    StrategyPath: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs
+
+  - Name: Conner Runion
+    StrategyPath: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs

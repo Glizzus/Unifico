@@ -7,11 +7,7 @@ namespace Unifico.Core.Plugins;
 
 public static class PluginFactory
 {
-    private static Assembly LoadPlugin(string relativePath)
-    {
-        var loadContext = new PluginLoadContext(relativePath);
-        return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(relativePath)));
-    }
+    private static readonly Dictionary<string, IStrategyPlugin> _pluginCache = new();
 
     private static IStrategyPlugin? ExtractPlugin(Assembly assembly)
     {
@@ -67,8 +63,10 @@ public static class PluginFactory
         return Assembly.Load(dllStream.ToArray(), pdbStream.ToArray());
     }
 
-    public static async Task<IStrategyPlugin?> Load(string relativePath)
+    public static async Task<IStrategyPlugin?> Create(string relativePath)
     {
+        if (_pluginCache.TryGetValue(relativePath, out var plugin))
+            return plugin;
         var assembly = await CompileToDll(relativePath);
         return ExtractPlugin(assembly);
     }

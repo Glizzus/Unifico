@@ -1,4 +1,6 @@
-﻿namespace Unifico.Core.Hand;
+﻿using Unifico.Core.Cards;
+
+namespace Unifico.Core.Hand;
 
 public interface IHand : IEnumerable<Card>
 {

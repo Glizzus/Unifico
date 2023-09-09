@@ -1,4 +1,5 @@
 ﻿using Unifico.Core;
+using Unifico.Core.Cards;
 using Unifico.Core.Hand;
 using Unifico.Core.Plugins;
 

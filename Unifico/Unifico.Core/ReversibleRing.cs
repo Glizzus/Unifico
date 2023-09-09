@@ -13,7 +13,7 @@ public class ReversibleRing<T>
 
     public int Count => _values.Length;
 
-    public T Current => _values.Span[_index];
+    public T Current => _index == -1 ? Next() : _values.Span[_index];
 
     private void AdjustIndex(int step)
     {

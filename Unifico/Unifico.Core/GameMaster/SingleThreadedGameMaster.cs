@@ -9,6 +9,8 @@ public class SingleThreadedGameMaster : BaseGameMaster
 
     public override async Task Run()
     {
+        var winMap =
+            new Dictionary<string, int>(Players.Select(player => new KeyValuePair<string, int>(player.Name, 0)));
         for (var i = 0; i < NumberOfGames; i++)
         {
             var clonedPlayers = Players.Select(player => player.Clone());
@@ -17,7 +19,10 @@ public class SingleThreadedGameMaster : BaseGameMaster
                 Name = $"Game {i}",
                 Output = new StreamWriter($"../Game {i}.txt")
             };
-            await game.Play();
+            var (winner, entropies) = await game.Play();
+            winMap[winner.Name]++;
         }
+
+        foreach (var pair in winMap) Console.WriteLine($"{pair.Key} won {pair.Value} times");
     }
 }
