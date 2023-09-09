@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Unifico.Core;
 
@@ -10,10 +12,6 @@ public class Game
     private readonly ReversibleRing<Player> _players;
     private readonly Rules _rules;
     private readonly StackJudge _stackJudge;
-
-    
-    public string Name { get; init; }
-    public TextWriter Output { get; init; } = Console.Out;
 
     private int _stackCount;
 
@@ -28,7 +26,13 @@ public class Game
         _rules = rules;
         _stackJudge = new StackJudge(_rules.PlusStackConvention);
     }
-    
+
+    private bool IsStack => _stackCount > 0;
+
+
+    public string Name { get; init; }
+    public TextWriter Output { get; init; } = Console.Out;
+
     private static Deck<Card> GenerateGoldenDeck()
     {
         var deck = new Deck<Card>(UnoDeckSize);
@@ -164,21 +168,26 @@ public class Game
         _deck.AddMany(cards);
     }
 
-    private void HandlePlayFailure(Player player, bool isStack)
+    /// <summary>
+    ///     Handles when a player is unable to play a card.
+    /// </summary>
+    /// <param name="player">The player that failed to play.</param>
+    /// <param name="isStack">Whether or not the player failed during a plus stack.</param>
+    /// <returns>The amount of cards the player had to draw.</returns>
+    private int HandlePlayFailure(Player player, bool isStack)
     {
         if (isStack)
         {
-            Output.WriteLine($"{player.Name} is forced to draw {_stackCount} cards.");
             var cards = ObtainCards(_stackCount);
             player.Hand.AddRange(cards);
+            var amountDrawn = _stackCount;
             _stackCount = 0;
+            return amountDrawn;
         }
-        else
-        {
-            Output.WriteLine($"{player.Name} is forced to draw a card.");
-            var newCard = ObtainCard();
-            player.Hand.Add(newCard);
-        }
+
+        var newCard = ObtainCard();
+        player.Hand.Add(newCard);
+        return 1;
     }
 
     private void HandlePlaySuccess(Card card)
@@ -198,41 +207,92 @@ public class Game
         }
     }
 
-    public void Play()
+    private async Task InitializeGame()
     {
         _deck.Shuffle();
         InitialDeal();
         InitializeDiscardPile();
+        await Output.WriteAsync("[");
+    }
+
+    private RoundSummary CreateRoundSummary()
+    {
+        return new RoundSummary
+        {
+            PlayerInfo = new PlayerInfo
+            {
+                Name = _players.Current.Name,
+                HandCount = new BeforeAfter
+                {
+                    Before = _players.Current.Hand.Count()
+                }
+            },
+            Target = new CardInfo
+            {
+                Color = _discardPile.Top.Color.ToString() ??
+                        throw new InvalidDataException("The top card does not have a color"),
+                Face = _discardPile.Top.Face.ToString(),
+                Wild = _discardPile.Top.IsWild
+            },
+            WasStack = IsStack
+        };
+    }
+
+    public async Task Play()
+    {
+        await InitializeGame();
         while (true)
         {
-            Output.WriteLine();
             var currentPlayer = _players.Next();
-            Output.WriteLine($"It is {currentPlayer.Name}'s turn.");
             var topCard = _discardPile.Top;
-            Output.WriteLine($"The top card is {topCard}.");
-            var isStack = _stackCount > 0;
-            Output.WriteLine(isStack ? $"The stack count is {_stackCount}." : "There is no stack");
-            var card = currentPlayer.Play(topCard, isStack, _stackJudge);
+
+            var summary = CreateRoundSummary();
+            if (IsStack) summary.StackCount = new BeforeAfter { Before = _stackCount };
+            var card = currentPlayer.Play(topCard, IsStack, _stackJudge);
             if (card is null)
             {
-                Output.WriteLine($"{currentPlayer.Name} has no cards to play.");
-                HandlePlayFailure(currentPlayer, isStack);
+                var amountDrawn = HandlePlayFailure(currentPlayer, IsStack);
+                if (IsStack) summary.StackCount!.After = _stackCount;
+                summary.AmountDraw = amountDrawn;
+
+                summary.PlayerInfo.HandCount.After = currentPlayer.Hand.Count();
+                var json2 = JsonSerializer.Serialize(summary, new JsonSerializerOptions
+                {
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    WriteIndented = true
+                });
+                await Output.WriteAsync(json2);
+                await Output.WriteAsync(",");
                 continue;
             }
 
-            Output.WriteLine($"{currentPlayer.Name} played {card}.");
             if (card.IsWild)
                 card.AssignColor(topCard.Color ?? throw new InvalidDataException("The top card does not have a color"));
-            HandlePlaySuccess(card);
-            if (currentPlayer.HasWon)
+            summary.Played = new CardInfo
             {
-                Output.WriteLine($"{currentPlayer.Name} won!");
-                Output.Flush();
-                Output.Close();
-                return;
+                Color = card.Color.ToString() ?? throw new InvalidDataException("The card does not have a color"),
+                Face = card.Face.ToString(),
+                Wild = card.IsWild
+            };
+
+            HandlePlaySuccess(card);
+
+            summary.PlayerInfo.HandCount.After = currentPlayer.Hand.Count();
+            var json = JsonSerializer.Serialize(summary, new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                WriteIndented = true
+            });
+            await Output.WriteAsync(json);
+            if (!currentPlayer.HasWon)
+            {
+                await Output.WriteAsync(",");
+                continue;
             }
 
-            Output.WriteLine();
+            await Output.WriteAsync("]");
+            await Output.DisposeAsync();
+            return;
         }
     }
 }

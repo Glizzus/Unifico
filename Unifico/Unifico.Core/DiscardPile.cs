@@ -23,10 +23,7 @@ public class DiscardPile<T>
     /// </summary>
     public void Push(T item)
     {
-        if (_list.Any())
-        {
-            CleanupPrevious?.Invoke(Top);
-        }
+        if (_list.Any()) CleanupPrevious?.Invoke(Top);
         _list.Add(item);
     }
 

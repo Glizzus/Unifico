@@ -1,23 +1,17 @@
-﻿using System.Net.Mime;
+﻿namespace Unifico.Core.GameMaster;
 
-namespace Unifico.Core;
-
-public class GameMaster
+public class MultiThreadedGameMaster : BaseGameMaster
 {
-    public IEnumerable<Player> Players { get; init; }
-    public int NumberOfThreads { get; init; }
-    public int NumberOfGames { get; init; }
-    public Rules Rules { get; init; }
-    
-    public GameMaster(IEnumerable<Player> players, int numberOfThreads, int numberOfGames, Rules rules)
+    public MultiThreadedGameMaster(IEnumerable<Player> players, int numberOfThreads, int numberOfGames, Rules rules) :
+        base(players,
+            numberOfGames, rules)
     {
-        Players = players;
         NumberOfThreads = numberOfThreads;
-        NumberOfGames = numberOfGames;
-        Rules = rules;
     }
-    
-    public async Task Run()
+
+    public int NumberOfThreads { get; init; }
+
+    public override async Task Run()
     {
         var semaphore = new SemaphoreSlim(NumberOfThreads);
         var tasks = new List<Task>();
@@ -25,7 +19,7 @@ public class GameMaster
         {
             await semaphore.WaitAsync();
             var gameNumber = i;
-            var task = Task.Run(() =>
+            var task = Task.Run(async () =>
             {
                 try
                 {
@@ -35,16 +29,17 @@ public class GameMaster
                         Name = $"Game {gameNumber}",
                         Output = new StreamWriter($"../Game {gameNumber}.txt")
                     };
-                    game.Play();
+                    await game.Play();
                 }
                 finally
                 {
                     semaphore.Release();
                 }
             });
-            
+
             tasks.Add(task);
         }
+
         await Task.WhenAll(tasks);
     }
 }

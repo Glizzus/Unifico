@@ -1,15 +1,6 @@
 ﻿using System.Collections;
 
-namespace Unifico.Core;
-
-public interface IHand : IEnumerable<Card>
-{
-    public void Add(Card card);
-    public void AddRange(IEnumerable<Card> cards);
-    public void Remove(Card card);
-
-    public IHand Clone();
-}
+namespace Unifico.Core.Hand;
 
 public class ListHand : IHand
 {
@@ -25,16 +16,21 @@ public class ListHand : IHand
         _cards.AddRange(cards);
     }
 
-    public void Remove(Card card)
+    public Card? Remove(Card card)
     {
-        _cards.Remove(card);
+        return _cards.Remove(card) ? card : null;
     }
-    
+
     public IHand Clone()
     {
         var hand = new ListHand();
         hand.AddRange(_cards);
         return hand;
+    }
+
+    public bool Contains(Card card)
+    {
+        return _cards.Contains(card);
     }
 
     public IEnumerator<Card> GetEnumerator()

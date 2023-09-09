@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unifico.Core.Tests", "Unifi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unifico.CLI", "Unifico.CLI\Unifico.CLI.csproj", "{0378E57F-6ED7-400F-8784-312913DFB965}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unifico.Plugins", "Unifico.Plugins\Unifico.Plugins.csproj", "{52C91DB7-EE25-4E4B-A692-CFFDC1F80A1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{0378E57F-6ED7-400F-8784-312913DFB965}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0378E57F-6ED7-400F-8784-312913DFB965}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0378E57F-6ED7-400F-8784-312913DFB965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C91DB7-EE25-4E4B-A692-CFFDC1F80A1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C91DB7-EE25-4E4B-A692-CFFDC1F80A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C91DB7-EE25-4E4B-A692-CFFDC1F80A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C91DB7-EE25-4E4B-A692-CFFDC1F80A1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

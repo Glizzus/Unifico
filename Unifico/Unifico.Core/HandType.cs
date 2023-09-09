@@ -1,4 +1,6 @@
-﻿namespace Unifico.Core;
+﻿using Unifico.Core.Hand;
+
+namespace Unifico.Core;
 
 public enum HandType
 {
