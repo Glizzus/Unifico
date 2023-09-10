@@ -1,14 +1,20 @@
-NumberOfGames: 1000
-NumberOfThreads: 4
+NumberOfGames: 100000
+NumberOfThreads: 1
 Rules:
   PlusStackConvention: Conservative
   DrawUntilPlayable: false
 Players:
   - Name: Cal Crosby
-    StrategyPath: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs
+    HandType: DictionaryHand 
+    Strategy:
+      Path: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs
   
   - Name: Payden Whiting
-    StrategyPath: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs
+    HandType: DictionaryHand 
+    Strategy:
+      Path: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs
 
   - Name: Conner Runion
-    StrategyPath: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs
+    HandType: DictionaryHand 
+    Strategy: 
+      Path: C:\Users\Glizzus\Projects\unifico-c#\Unifico\Unifico.Plugins\PreferFaceStrategy.cs

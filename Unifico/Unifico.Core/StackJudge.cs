@@ -8,8 +8,13 @@ namespace Unifico.Core;
 /// </summary>
 public class StackJudge
 {
+    // We store the function as a field so that we don't have to recompute it every time.
     private readonly Func<Card, Card, bool> _stackFunction;
 
+    /// <summary>
+    ///     Constructs a new <see cref="StackJudge" /> with the given <see cref="PlusStackConvention" />.
+    /// </summary>
+    /// <param name="convention">The <see cref="PlusStackFunction" /> to plus stack by.</param>
     public StackJudge(PlusStackConvention convention)
     {
         _stackFunction = PlusStackFunction(convention);

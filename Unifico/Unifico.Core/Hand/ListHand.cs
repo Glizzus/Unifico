@@ -22,13 +22,6 @@ public class ListHand : IHand
         return _cards.Remove(card) ? card : null;
     }
 
-    public IHand Clone()
-    {
-        var hand = new ListHand();
-        hand.AddRange(_cards);
-        return hand;
-    }
-
     public bool Contains(Card card)
     {
         return _cards.Contains(card);

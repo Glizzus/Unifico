@@ -9,6 +9,4 @@ public interface IHand : IEnumerable<Card>
     public Card? Remove(Card card);
 
     public bool Contains(Card card);
-
-    public IHand Clone();
 }

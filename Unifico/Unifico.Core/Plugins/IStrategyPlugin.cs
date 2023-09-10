@@ -3,7 +3,7 @@
 namespace Unifico.Core.Plugins;
 
 /// <summary>
-///     A strategy plugin is a strategy that can be loaded from a plugin.
+///     A <see cref="IStrategy" /> that can be loaded from a plugin.
 /// </summary>
 public interface IStrategyPlugin : IStrategy
 {

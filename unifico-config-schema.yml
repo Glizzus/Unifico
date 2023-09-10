@@ -23,15 +23,22 @@ properties:
       properties:
         Name:
           type: string
+        HandType:
+          type: string
+          enum: [TabularHand, ListHand, DictionaryHand]
         Strategy:
-          type: string
-        StrategyPath:
-          type: string
-      oneOf:
-        - required:
-          - Strategy
-        - required:
-          - StrategyPath
+          type: object
+          properties:
+            Builtin:
+              type: string
+              enum: [Simple]
+            Path:
+              type: string
+          oneOf:
+            - required:
+              - Strategy
+            - required:
+              - StrategyPath
 
 
 required:

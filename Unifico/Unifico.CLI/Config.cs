@@ -7,25 +7,36 @@ using YamlDotNet.Serialization;
 
 namespace Unifico.CLI;
 
+public class StrategyConfig
+{
+    public BuiltinStrategy? Builtin { get; set; }
+    public string? Path { get; set; }
+
+    public async Task<IStrategy> ToStrategy()
+    {
+        return (Builtin, Path) switch
+        {
+            (not null, not null) => throw new Exception("Both builtin and path specified"),
+            ({ } builtin, null) => StrategyFactory.Create(builtin),
+            (null, { } path) => await PluginFactory.Create(path) ??
+                                throw new FileNotFoundException("Could not load plugin"),
+            (null, null) => throw new Exception("No strategy specified")
+        };
+    }
+}
+
 public class PlayerConfig
 {
     public string Name { get; set; } = null!;
 
-    public string? Strategy { get; set; }
-    public string? StrategyPath { get; set; }
+    public HandType HandType { get; set; } = HandType.ListHand;
+
+    public StrategyConfig Strategy { get; set; }
 
     public async Task<Player> ToPlayer()
     {
-        if (StrategyPath != null)
-        {
-            var plugin = await PluginFactory.Create(StrategyPath) ??
-                         throw new FileNotFoundException("Could not load plugin");
-            return new Player(Name, HandType.ListHand, plugin);
-        }
-
-        if (Strategy != null)
-            return new Player(Name, HandType.ListHand, StrategyFactory.Create(Strategy));
-        throw new Exception("No strategy specified");
+        var strategy = await Strategy.ToStrategy();
+        return new Player(Name, HandType, strategy);
     }
 }
 

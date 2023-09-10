@@ -1,5 +1,8 @@
 ﻿namespace Unifico.Core;
 
+/// <summary>
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class Deck<T> where T : class
 {
     private readonly List<T> _values;
@@ -33,11 +36,19 @@ public class Deck<T> where T : class
         return item;
     }
 
+    /// <summary>
+    ///     Adds an item to the deck.
+    /// </summary>
+    /// <param name="value">The items to add to the deck.</param>
     public void Add(T value)
     {
         _values.Add(value);
     }
 
+    /// <summary>
+    ///     Adds many items to the deck.
+    /// </summary>
+    /// <param name="values">The items to add to the deck.</param>
     public void AddMany(IEnumerable<T> values)
     {
         _values.AddRange(values);
@@ -48,7 +59,7 @@ public class Deck<T> where T : class
     ///     This returns null if the deck does not have enough items.
     /// </summary>
     /// <param name="count">The amount of items to draw from the deck.</param>
-    /// <returns>An IEnumerable containing the </returns>
+    /// <returns>An IEnumerable containing the amount of items, or null if that can't be fulfilled.</returns>
     public IList<T>? DrawMany(int count)
     {
         if (count > _values.Count) return null;
