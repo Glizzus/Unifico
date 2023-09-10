@@ -20,7 +20,8 @@ public class StrategyConfig
             ({ } builtin, null) => StrategyFactory.Create(builtin),
             (null, { } path) => await PluginFactory.Create(path) ??
                                 throw new FileNotFoundException("Could not load plugin"),
-            (null, null) => throw new Exception("No strategy specified")
+            // The simple strategy is the default.
+            (null, null) => StrategyFactory.Create(BuiltinStrategy.Simple)
         };
     }
 }
@@ -31,12 +32,12 @@ public class PlayerConfig
 
     public HandType HandType { get; set; } = HandType.ListHand;
 
-    public StrategyConfig Strategy { get; set; }
+    public StrategyConfig? Strategy { get; set; } = null!;
 
     public async Task<Player> ToPlayer()
     {
-        var strategy = await Strategy.ToStrategy();
-        return new Player(Name, HandType, strategy);
+        var strategyConfig = Strategy ?? new StrategyConfig();
+        return new Player(Name, HandType, await strategyConfig.ToStrategy());
     }
 }
 
